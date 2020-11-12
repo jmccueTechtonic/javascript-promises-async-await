@@ -1,4 +1,10 @@
-import { fetchWithTimeout, fetchMovies, fetchBooks, asyncFetchBooks, asyncFetchMovies } from './services';
+import {
+  fetchWithTimeout,
+  fetchMovies,
+  fetchBooks,
+  asyncFetchBooks,
+  asyncFetchMovies
+} from "./services";
 const movies = require("./data/movies.json");
 
 const getBooksAndMovies = () => {
@@ -9,29 +15,34 @@ const getBooksAndMovies = () => {
     }))
     .catch(error => console.log("Error fetching books and movies", error));
 };
-
 const getBooksAndMoviesPromise = getBooksAndMovies();
-
 getBooksAndMoviesPromise.then(results => {
-  console.log('getBooksAndMoviesPromise', results);
+  console.log("getBooksAndMoviesPromise", results);
 });
 
 function getBooksOrMovies() {
-  return Promise.race([fetchBooks(), fetchMovies()]).then(results => results)
-    .catch(error => console.log("Error waiting for the promise race", error));
+  return Promise.race([fetchBooks(), fetchMovies()])
+    .then(results => results)
+    .catch(error => {
+      console.log("Error waiting for the promise race", error);
+    });
 }
 
 const getBooksOrMoviesPromise = getBooksOrMovies();
-
 getBooksOrMoviesPromise.then(results => {
-  console.log('getBooksOrMoviesPromise', results)
-    ;
+  console.log("getBooksOrMoviesPromise", results);
 });
 
 async function getBooksAndMoviesAsync() {
   try {
-    const [books, movies] = await Promise.all([asyncFetchBooks(), asyncFetchMovies()]);
-    return { books, movies };
+    const [books, movies] = await Promise.all([
+      asyncFetchBooks(),
+      asyncFetchMovies()
+    ]);
+    return {
+      books,
+      movies
+    };
   } catch (error) {
     console.log("Error fetching books and movies", error);
     return error;
@@ -45,7 +56,7 @@ async function getBooksOrMoviesAsync() {
 
 getBooksAndMoviesAsync()
   .then(results => {
-    console.log("movies and books", {
+    console.log("movies AND books", {
       movies: results.movies,
       books: results.books
     });
@@ -60,6 +71,6 @@ getBooksOrMoviesAsync()
       results
     });
   })
-  .catch(error => {
+  .catch(error =>
     console.error("Error in getBooksOrMoviesAsync execution", error)
-  });
+  );
